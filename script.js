@@ -1,7 +1,7 @@
 //Challenge - 1
 var clickMeButton = document.querySelector(".btn-primary");
 var resultt = document.querySelector(".result");
-var resetButton = document.querySelector(".btn-secondary");
+var resetButton = document.querySelector(".btn-danger");
 resetButton.addEventListener('click',()=>{
     document.getElementById('1').innerText="";
 })
@@ -25,16 +25,16 @@ catGenerate.addEventListener('click',()=>{
 
 //Challenge-3
 function rpsGame(yourChoice){
-    console.log(yourChoice);
+    // console.log(yourChoice);
    var humanChoice , botChoice;
    humanChoice = yourChoice.id;
    botChoice = getBotChoice();
-   console.log('humanChoice is ',humanChoice)
-   console.log('botChoice is ',botChoice)
+//    console.log('humanChoice is ',humanChoice)
+//    console.log('botChoice is ',botChoice)
    var results = decideWinner(humanChoice,botChoice) //[0,1] human lost | bot won 
-   console.log(results);
+//    console.log(results);
    message = finalMessage(results) //{"message" :"You lost","color": 'Green'}
-   console.log(message);
+//    console.log(message);
    rpsFrontEnd(humanChoice,botChoice,message);
 
 }
@@ -94,15 +94,108 @@ function rpsFrontEnd(humanImageChoice,computerImageChoice,finalmessagee){
     document.getElementById('flex-box-rps-div').appendChild(humanDiv);
     document.getElementById('flex-box-rps-div').appendChild(messageDiv);
     document.getElementById('flex-box-rps-div').appendChild(botDiv);
+}
 
+//Challenge-4
 
-    
-    
-
-
-    
+var allbtns = document.getElementsByClassName("btn")
+var copyAllBtns = []
+for (let i = 0 ; i < allbtns.length ; i++){
+    copyAllBtns.push(allbtns[i].classList[1]);
 
 }
+// console.log(allbtns)
+// console.log(copyAllBtns);
+
+function buttonColorChange(buttonThingy){
+    if(buttonThingy.value === "red"){
+        buttonRed();
+    }else if(buttonThingy.value === "green"){
+        buttonGreen();
+    }else if(buttonThingy.value === "reset"){
+        buttonReset();
+    }else if(buttonThingy.value === "random"){
+        buttonRandom();
+    }
+}
+
+function buttonRed(){
+    for(let i = 0 ; i<allbtns.length ; i++){
+        allbtns[i].classList.remove(allbtns[i].classList[1]);
+        allbtns[i].classList.add('btn-danger')
+    }
+}
+function buttonGreen(){
+    for(let i = 0 ; i<allbtns.length ; i++){
+        allbtns[i].classList.remove(allbtns[i].classList[1]);
+        allbtns[i].classList.add('btn-success')
+    }
+}
+function buttonReset(){
+    for (let i = 0 ; i < allbtns.length ; i++){
+        allbtns[i].classList.remove(allbtns[i].classList[1])
+        allbtns[i].classList.add(copyAllBtns[i]);
+    }
+}
+function buttonRandom(){
+    for(let i = 0 ; i<allbtns.length ; i++){
+        var randomCol = ["btn-primary","btn-success","btn-warning"]
+        allbtns[i].classList.remove(allbtns[i].classList[1])
+        allbtns[i].classList.add(randomCol[Math.floor(Math.random()*3)])
+    }
+
+
+}
+
+//challenge-5
+
+
+let blackjackGame = {
+    'you' :{'scoreSpan': '#your-blackjack-result', 'div':"#your-box", 'score':0},
+    'dealer':{'scoreSpan':'#dealer-blackjack-result','div':'#dealer-box','score':0},
+    'cards':['2','3','4','5','6','7','8','9','10','K','Q','J','A'],
+    'cardMap':{'1':1,'2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,'10':10,'K':10,'Q':10,'J':10,"A":[1,11]},
+};
+const YOU  = blackjackGame['you'];
+const DEALER = blackjackGame['dealer'];
+const audio = new Audio('Blackjackassets/sounds/swish.m4a');
+
+// HIT BUTTON => shows card
+document.querySelector('#blackjack-hit-button').addEventListener('click',()=>{
+    let card = getRandomCard();
+    console.log(card);
+   showCard(card,YOU);
+   showCard(card,DEALER);
+//    updateScore(card,YOU)
+//    console.log(YOU['score']);
+   
+})
+function getRandomCard(){
+    const randomIndex = blackjackGame['cards'][Math.floor(Math.random()*13)];
+    return blackjackGame['cards'][randomIndex];
+}
+function showCard(card,activePlayer){
+   let cardImage= document.createElement('img');
+   cardImage.src = `Blackjackassets/cards/${card}.png`;
+   document.querySelector(activePlayer['div']).appendChild(cardImage);
+   audio.play();
+}
+// DEAL BUTTON REMOVES THE CARDS
+document.querySelector('#blackjack-deal-button').addEventListener('click',()=>{
+    blackjackDeal();
+})
+function blackjackDeal(){
+   let imagez = document.querySelector('#your-box').querySelectorAll("img");
+   let imagezz = document.querySelector('#dealer-box').querySelectorAll("img");
+//    console.log(imagez); =>gives you an array   of images
+for ( let i = 0 ; i<imagez.length ; i++){
+    imagez[i].remove();
+for ( let i = 0 ; i<imagezz.length ; i++){
+    imagezz[i].remove();
+}
+}
+
+
  
 
 
@@ -163,6 +256,19 @@ function rpsFrontEnd(humanImageChoice,computerImageChoice,finalmessagee){
 
  */
 
+
+
+
+
+
+
+}
+
+
+
+function updateScore(card,activePlayer){
+    activePlayer['score'] += blackjackGame['cardMap'][card];
+}
 
 
 
